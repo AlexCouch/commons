@@ -1,0 +1,10 @@
+{
+    "name": "commons",
+    "kind": "container",
+    "other_includes": [],
+    "other_libs": [],
+    "workspaces": [
+        "string",
+        "commons"
+    ]
+}
