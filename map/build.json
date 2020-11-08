@@ -2,11 +2,11 @@
     "name": "map",
     "kind": "app",
     "other_includes": [
-        "C:\\projects\\allocators\\main\\includes",
+        "C:\\projects\\commons\\allocators\\main\\includes",
         "C:\\projects\\commons\\string\\includes",
         "C:\\projects\\commons\\commons\\includes"
     ],
     "other_libs": [
-        "C:\\projects\\allocators\\main\\build\\allocators.lib"
+        "C:\\projects\\commons\\allocators\\main\\build\\allocators.lib"
     ]
 }

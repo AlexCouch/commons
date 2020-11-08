@@ -6,6 +6,7 @@
     "workspaces": [
         "string",
         "commons",
-        "map"
+        "map",
+        "allocators"
     ]
 }

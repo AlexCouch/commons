@@ -23,7 +23,7 @@ void test1(void){
 void test3(void){
     string example1 = create_string("Hello");
     string example2 = create_string("Hello!@");
-    bool eq = stringeq(example1, example2);
+    bool eq = stringeq(&example1, &example2);
     if(!eq){
         printf("String compare works as expected!\n");
         return;
