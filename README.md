@@ -24,5 +24,6 @@ string* value_ptr = (string*)map_get(_map, key_ptr, OTHER, sizeof(string), &stri
 if(value == NULL){
     return;
 }
+printf("%s%s\n", key->str_data, value->str_data);
 ```
 This code can execute on my machine within 30 ms on average. However, I have not tested it with a larget scale use. I hope to do so soon.
