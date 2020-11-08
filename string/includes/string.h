@@ -91,3 +91,41 @@ void string2str(str dest, string* src){
     // printf("Copying %s into str: %s\n", src->str_data, dest);
     strcat(dest, src->str_data);
 }
+
+/*
+            STRING COMPARISONS
+*/
+
+
+bool stringeq(string* s1, string* s2){
+    bool ran = false;
+    bool pass_flag = true;
+    u32 counted = 0;
+    for(
+        u32 i = 0;
+        i < s1->len && i < s2->len;
+        i++
+    ){
+        ran = true;
+        char c1 = s1->str_data[i];
+        char c2 = s2->str_data[i];
+        if(c1 != c2){
+            // printf("Found a discrepency: %c in s1, %c in s2, at %i", c1, c2, i);
+            pass_flag = false;
+            break;
+        }
+        counted++;
+    }
+    // printf("Counted %i in both strings\n", counted);
+    if(counted < s2->len){
+        // printf("Counted less than the len of string 2\n");
+        pass_flag = false;
+    }
+    return pass_flag;
+}
+
+bool strcmp(str s1, str s2){
+    string string1 = create_string(s1);
+    string string2 = create_string(s2);
+    return stringeq(&string1, &string2);
+}

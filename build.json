@@ -5,6 +5,7 @@
     "other_libs": [],
     "workspaces": [
         "string",
-        "commons"
+        "commons",
+        "map"
     ]
 }
