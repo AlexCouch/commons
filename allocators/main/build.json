@@ -1,8 +1,0 @@
-{
-    "name": "allocators",
-    "kind": "lib",
-    "other_includes": [
-        "C:\\projects\\commons\\commons\\includes"
-    ],
-    "other_libs": []
-}

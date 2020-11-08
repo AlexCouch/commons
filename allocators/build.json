@@ -1,0 +1,6 @@
+{
+    "name": "allocators",
+    "kind": "lib",
+    "other_includes": [],
+    "other_libs": []
+}
