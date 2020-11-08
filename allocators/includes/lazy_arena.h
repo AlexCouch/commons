@@ -38,6 +38,8 @@ void* lazy_arena_put(lazy_arena_alloc* arena, u32 offset, void* data, u32 size){
         return NULL;
     }
     ///Get the new destination as a u8* and use it to copy `data` into the address of the offset
+    ///It's casted to a u8* because void* has no known size, so offsetting it to get the address to put the data in will not work.
+    ///u8* makes it so that we can offset with byte sized strides, which gives us exactly what we need.
     ///MEM: Borrowed
     ///LIFETIME: Borrowed by memcpy, Borrowed by return/caller
     u8* dest = ((u8*)arena->start) + offset;
