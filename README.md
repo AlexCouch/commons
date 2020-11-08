@@ -13,7 +13,7 @@ For me, cman tells me that using string2string cat function is about 20-25 ms fa
 A map implementation that is cache-friendly and simple to use.
 ```c
 string key = create_string("Hello");
-string value = create_stirng("World");
+string value = create_string("World");
 arena_alloc* arena = arena_init(1024);
 map* _map = create_map(arena);
 string* key_ptr = (string*)map_put(_map, &key, sizeof(string), OTHER, &value, sizeof(string), OTHER);
