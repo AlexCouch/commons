@@ -15,6 +15,7 @@
 ///This makes iteration easier.
 ///SEE: create_list_iter, list_iter_next
 typedef struct list_entry list_entry;
+PUBLIC
 struct list_entry{
     u32 size;
     list_entry* next;
@@ -41,19 +42,24 @@ struct list_entry{
 ///to another, where any "removed" elements will be deinitialized/free with the rest of this list's
 ///arena. Any entries that have stuck around will be transferred to another arena.
 ///If you'd like to transfer this list to another arena, use list_transfer with a new arena pointer.
+PUBLIC
 struct list{
     ///The arena being used to allocate to
+    INTERNAL
     arena_alloc* arena;
     ///Number of elements currently added to this list
+    INTERNAL
     u32 element_count;
     ///The first element in the list
     ///This is used for iteration
     ///This is first set to NULL
+    INTERNAL
     list_entry* first_element;
     ///The last entry in the list. This is used to set the `next` pointer in
     ///this entry to the next entry when list_add is called.
     ///Then this field will be set to that newly added entry
     ///This is first set to first_element
+    INTERNAL
     list_entry* last_element;
 };
 typedef struct list list;
@@ -63,6 +69,7 @@ typedef struct list list;
 ///Creates a new list with the given greedy arena pointer
 ///The arena is used for allocating a new list object at the new available slot in the arena
 ///When arena_deinit is called with list->arena, this list will also be deinitialized.
+PUBLIC
 list* create_list(arena_alloc* arena){
     list _list;
     _list.arena = arena;
@@ -75,6 +82,7 @@ list* create_list(arena_alloc* arena){
 ///This will automatically put a new list_entry into the list's greedy arena pointer
 ///This list_entry will immediately be followed by the given data
 ///The _list->next_element will be filled by the 
+PUBLIC
 void* list_add(list* _list, void* data, u32 size){
     if(size > _list->arena->size){
         ///TODO: Need to make an assertion/debug library and replace this with a debug/assert call. ~alex, 11/8/2020, 11:19 PM PST
@@ -112,15 +120,19 @@ void* list_add(list* _list, void* data, u32 size){
 
 
 ///A list iterator. This is used for iterating and keeping track of the current iteration
+PUBLIC
 struct list_iter{
     ///The list being iterated over
+    INTERNAL
     list* _list;
     ///The entry of the current iteration
+    INTERNAL
     list_entry* curr_entry;
 };
 typedef struct list_iter list_iter;
 ///Creates a new list_iter from the given list
 ///NOTE: This returns a list_iter on the stack
+PUBLIC
 list_iter create_list_iter(list* _list){
     list_iter iter;
     iter._list = _list;
@@ -144,6 +156,7 @@ list_entry* list_iter_next(list_iter* iter){
 ///Removes it from iteration by cutting its connection with its previous entry
 ///and its next entry. This will make it so that the iterator does not see it and cannot
 ///be found when using list_get or list_index_of
+PUBLIC
 void* list_remove(list* _list, u32 idx){
     if(idx > _list->element_count){
         ///TODO: Replace with a debug/assert with a debug/assert library. ~alex, 11/8/2020, 11:23 PM PST
@@ -213,6 +226,7 @@ void* list_remove(list* _list, u32 idx){
 ///Step3: Loop over list_iter_next while keeping track of the current iteration count, called i
 ///Step4: If i == idx, return the data in the current entry, from list_iter_next
 ///Step5: return NULL
+PUBLIC
 void* list_get(list* _list, u32 idx){
     if(idx > _list->element_count){
         ///TODO: Replace with a debug/assert with a debug/assert library. ~alex, 11/8/2020, 11:23 PM PST
@@ -259,6 +273,7 @@ void* list_get(list* _list, u32 idx){
 ///If the data is equivalent to the data at an index, that index will be returned
 ///-1 is returned otherwise
 ///TODO: Test this procedure
+PUBLIC
 i32 list_index_of(list* _list, void* data, bool (*eq_check)(void*, void*)){
     ///The iterator object over the given list object
     ///This is used for getting the next element in the list
@@ -313,6 +328,7 @@ i32 list_index_of(list* _list, void* data, bool (*eq_check)(void*, void*)){
 ///NOTE: Step4 is deinit'ing the _list->arena which will also deinit the list itself.
 ///TEST: This hasn't been tested yet but will be tested in the future
 ///TODO: Test this procedure
+PUBLIC
 list* list_transfer(list* _list, arena_alloc* new_arena){
     ///The new list we are transferring to in which will be returned
     ///MEM: Borrowed-always
