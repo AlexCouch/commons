@@ -1,0 +1,11 @@
+{
+    "name": "list",
+    "kind": "app",
+    "other_includes": [
+        "C:\\projects\\commons\\allocators\\includes",
+        "C:\\projects\\commons\\commons\\includes"
+    ],
+    "other_libs": [
+        
+    ]
+}
