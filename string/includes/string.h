@@ -2,12 +2,17 @@
 
 #include "commons.h"
 
+PUBLIC
+EXTENSION(str_data)
+INIT(INTERNAL, create_string)
 struct string{
-    char* str_data;
+    str str_data;
     u32 len;
 };
 typedef struct string string;
 
+PUBLIC
+RECEIVER(str_data)
 string create_string(str str_data){
     string str;
     str.str_data = str_data;
@@ -21,6 +26,8 @@ string create_string(str str_data){
     return str;
 }
 
+RECEIVER(dest)
+PUBLIC
 void strcat(str dest, str src){
     // printf("Concatenating %s into %s\n", src, dest);
     u32 dest_end = 0;
@@ -67,6 +74,8 @@ void strcat(str dest, str src){
     dest[dest_end + src_end] = '\0';
 }
 
+PUBLIC
+RECEIVER(dest)
 void string2string(string* dest, string* src){
     char* dest_data = dest->str_data;
     char* src_data = src->str_data;
@@ -82,11 +91,15 @@ void string2string(string* dest, string* src){
     dest->len += src->len;
 }
 
+PUBLIC
+RECEIVER(dest)
 void str2string(string* dest, str src){
     string src_str = create_string(src);
     string2string(dest, &src_str);
 }
 
+PUBLIC
+RECEIVER(dest)
 void string2str(str dest, string* src){
     // printf("Copying %s into str: %s\n", src->str_data, dest);
     strcat(dest, src->str_data);
@@ -96,7 +109,8 @@ void string2str(str dest, string* src){
             STRING COMPARISONS
 */
 
-
+PUBLIC
+RECEIVER(s1)
 bool stringeq(string* s1, string* s2){
     bool ran = false;
     bool pass_flag = true;
@@ -124,6 +138,8 @@ bool stringeq(string* s1, string* s2){
     return pass_flag;
 }
 
+PUBLIC
+RECEIVER(s1)
 bool strcmp(str s1, str s2){
     string string1 = create_string(s1);
     string string2 = create_string(s2);

@@ -60,6 +60,7 @@ struct map_entry{
 
 
 PUBLIC
+EXTENSION(arena)
 struct map{
     INTERNAL 
     arena_alloc* arena;
@@ -74,6 +75,7 @@ typedef struct map map;
 
 ///Creates a new map with a NULL first_entry, indicating it currently has no values.
 PUBLIC
+RECEIVER(arena)
 map* create_map(arena_alloc* arena){
     ///A new map instance. Passed into arena_put to acquire a pointer to its heap counterpart.
     ///MEM: Borrowed
@@ -98,6 +100,7 @@ map* create_map(arena_alloc* arena){
 ///data_size => The size of the data for the entry
 ///data => The data itself this entry is being associated with
 INTERNAL
+EXTENSION(_map)
 map_entry* create_map_entry(
     map* _map,
     map_entry_kind kind,
@@ -146,6 +149,7 @@ map_entry* create_map_entry(
 }
 
 ///A map iterator struct. This is just a record that is kept for iterating and finding a key of a given data and return the corresponding value
+EXTENSION(map)
 struct map_iter{
     ///The map being iterated
     map* map;
@@ -156,6 +160,7 @@ typedef struct map_iter map_iter;
 
 ///Creates a map iter on the stack. This will record the iteration details over the map.
 ///This will init to the start of the map according to the beginning of the map, aka _map->first_entry
+RECEIVER(_map)
 map_iter create_map_iter(map* _map){
     map_iter iter;
     iter.map = _map;
@@ -163,6 +168,7 @@ map_iter create_map_iter(map* _map){
     return iter;
 }
 
+RECEIVER(iter)
 map_entry* next_entry(map_iter iter){
     map_entry* curr = iter.curr_entry;
     iter.curr_entry = curr->next;
@@ -170,6 +176,7 @@ map_entry* next_entry(map_iter iter){
 }
 
 PUBLIC
+RECEIVER(_map)
 void* map_get(
     ///The map we want to get a key-value from
     map* _map, 
@@ -234,6 +241,7 @@ void* map_get(
 }
 
 PUBLIC
+RECEIVER(_map)
 void* map_put(
     map* _map, 
     ///Key data, size, and type of data
