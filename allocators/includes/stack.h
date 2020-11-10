@@ -37,7 +37,8 @@ typedef struct stack_alloc stack_alloc;
 ///TODO: Replace null-check with null-assert
 ///TODO: Replace printing with debug assert/logging
 ///~alex, 3:48 AM PST, 11/10/2020
-stack_alloc*    stack_init(lazy_arena_alloc* arena, u32 size){
+RECEIVER(arena)
+stack_alloc* stack_init(lazy_arena_alloc* arena, u32 size){
     if(arena == NULL){
         printf("Expected an initialized lazy_arena_alloc*, but instead got NULL!\n");
         return NULL;
@@ -58,7 +59,7 @@ stack_alloc*    stack_init(lazy_arena_alloc* arena, u32 size){
 ///The size is used to create a new lazy_arena_alloc with the given size, so that the lazy arena
 ///is sized relative to the stack itself.
 ///~alex, 3:48 AM PST, 11/10/2020
-stack_alloc*    stack_init_full(u32 size){
+stack_alloc* stack_init_full(u32 size){
     ///Create a new lazy_arena_alloc. This is used by the stack to do push/pop
     ///MEM: Borrowed-always
     ///LIFETIME: This sticks around until the stack is passed into stack_deinit
@@ -79,17 +80,18 @@ stack_alloc*    stack_init_full(u32 size){
     ///A pointer to the copied [stack] variable in the arena at offset 0
     ///MEM: Borrowed-always
     ///LIFETIME: This persists until this same address is given to stack_deinit
-    stack_alloc* stack_ptr = lazy_arena_put(arena, 0, &stack, sizeof(stack_alloc));
+    stack_alloc* stack_ptr = lazy_arena_put(lazy_arena, 0, &stack, sizeof(stack_alloc));
     return stack_ptr;
 }
 ///Deinitialize the given stack by using the stack->arena to deallocate the entire stack and arena.
 ///TODO: Replace null-check with null-assert
 ///~alex, 3:48 AM PST, 11/10/2020
-void            stack_deinit(stack_alloc* stack){
+RECEIVER(stack)
+void stack_deinit(stack_alloc* stack){
     ///If this is already freed, or was corrupted and set to NULL somehow,
     ///we need to prevent that crashing our program by becoming a use-after-free/null-ptr-crash
     if(stack == NULL){
-        return NULL;
+        return;
     }
     ///Pass the stored lazy_arena_alloc* [stack->arena] field into lazy_arena_deinit, which then
     ///deinitialized the entire stack in the arena.
@@ -102,7 +104,8 @@ void            stack_deinit(stack_alloc* stack){
 ///TODO: replace weak printing and returning with a debug assert/logging
 ///TODO: Replace null-check with null-assert
 ///~alex, 3:48 AM PST, 11/10/2020
-void*           stack_push(stack_alloc* stack, void* data, u32 size){
+RECEIVER(stack)
+void* stack_push(stack_alloc* stack, void* data, u32 size){
     ///Check if the stack is NULL. This is not OKAY!!!
     ///~alex, 3:57 AM PST, 11/10/2020
     if(stack == NULL){
@@ -139,7 +142,8 @@ void*           stack_push(stack_alloc* stack, void* data, u32 size){
 ///~alex, 3:48 AM PST, 11/10/2020
 ///TODO: Replace null-checks with null-asserts
 ///TODO: Replace weak printing with debug asserts/logging
-void           stack_pop(stack_alloc* stack, u32 size){
+RECEIVER(stack)
+void stack_pop(stack_alloc* stack, u32 size){
     if(stack == NULL){
         printf("stack* cannot be null!\n");
         return;
@@ -155,7 +159,13 @@ void           stack_pop(stack_alloc* stack, u32 size){
         printf("Cannot pop size greater than what is already on the stack: %i", pushed_size);
         return;
     }
+}
 
+///This is a secondary procedure that will first pop off the stack and then clear the popped data
+///This is inefficient so if you absolutely need to clear the popped data, this is your goto.
+///~alex, 6:18 AM PST, 11/10/2020
+void stack_pop_and_clear(stack_alloc* stack, u32 size){
+    stack_pop(stack, size);
     /*
         The following code paragraph is simply going through a popped data and zeroing it out
         A lot of stack allocators will just decrement the stack pointer but just for brevity

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "commons.h"
+#include <malloc.h>
 
 ///A lazy arena is an arena that does not care about where you allocate things.
 ///It only cares about whether you're allocating within a given size
