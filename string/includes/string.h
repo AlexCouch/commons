@@ -1,6 +1,9 @@
 #pragma once
 
+#include <stdarg.h>
 #include "commons.h"
+#include <stdio.h>
+#include <malloc.h>
 
 PUBLIC
 EXTENSION(str_data)
@@ -13,11 +16,22 @@ typedef struct string string;
 
 PUBLIC
 RECEIVER(str_data)
-string create_string(str str_data){
+///TODO: Obviously doing all of this on the stack wont work out so well, so we might have
+///         to integrate this with some kind of allocator. I don't want to do that but I
+///         might have to :(
+///         ~alex, 4:58 AM PST, 11/11/2020
+string create_string(str str_data, ...){
     string str;
-    str.str_data = str_data;
+    
+    va_list args;
+    va_start(args, str_data);
+    char buffer[512];
+    vsprintf(buffer, str_data, args);
+    va_end(args);
+
     for(u32 i = 0;;i++){
-        char c = str_data[i];
+        char c = buffer[i];
+        str.str_data[i] = c;
         if(c == '\0'){
             str.len = i;
             break;
@@ -144,4 +158,43 @@ bool strcmp(str s1, str s2){
     string string1 = create_string(s1);
     string string2 = create_string(s2);
     return stringeq(&string1, &string2);
+}
+
+PUBLIC
+RECEIVER(str)
+void trim(string str){
+    u32 left = 0;
+    bool trim_left_flag = true;
+    bool left_trimmed = false;
+    u32 right = str.len - 1;
+    bool trim_right_flag = true;
+    bool right_trimmed = false;
+    for(
+        left, right;
+        left < str.len, right >= 0;
+        left++, right--
+    ){
+        char lchar = str.str_data[left];
+        char rchar = str.str_data[right];
+        if(lchar != ' '){
+            trim_left_flag = false;
+        }
+        if(rchar != ' '){
+            trim_right_flag = false;
+        }
+        if(!trim_left_flag && !left_trimmed){
+            str.str_data += left;
+            str.len -= left;
+            left_trimmed = true;
+        }
+        if(!trim_right_flag && !right_trimmed){
+            str.len -= right;
+            str.str_data[right+1] = 0;
+            right_trimmed = true;
+        }
+        if(left_trimmed && right_trimmed){
+            break;
+        }
+    }
+
 }

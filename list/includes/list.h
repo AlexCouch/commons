@@ -1,6 +1,9 @@
 #pragma once
 
 #include "arena.h"
+#include "string.h"
+#include "debug.h"
+#include <stdio.h>
 
 ///An entry in the list.
 ///Each entry holds the size of the data, the next entry in the data
@@ -236,8 +239,11 @@ PUBLIC
 RECEIVER(_list)
 void* list_get(list* _list, u32 idx){
     if(idx > _list->element_count){
-        ///TODO: Replace with a debug/assert with a debug/assert library. ~alex, 11/8/2020, 11:23 PM PST
-        printf("Index %i given is not within list indices %i", idx, _list->element_count);
+        #ifdef DEBUG
+            string message = create_string("Index %i given is not within list indices %i", idx, _list->element_count);
+            string from = create_string("list_get");
+            debug_log(&from, &message);
+        #endif
         return NULL;
     }
     ///If the list is empty, return NULL

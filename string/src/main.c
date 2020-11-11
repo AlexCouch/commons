@@ -33,9 +33,19 @@ void test3(void){
     }
 }
 
+void test4(void){
+    string example1 = create_string("   sup!");
+    string example2 = create_string("   hello    world  ");
+    trim(example1);
+    printf("example1 after trim: %s\n", example1.str_data);
+    trim(example2);
+    printf("example2 after trim: %s\n", example2.str_data);
+}
+
 int main(){
     // test1();
     // test2();
-    test3();
+    // test3();
+    test4();
     return 0;
 }
