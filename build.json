@@ -8,6 +8,8 @@
         "commons",
         "map",
         "allocators",
-        "list"
+        "list",
+        "debug",
+        "time"
     ]
 }

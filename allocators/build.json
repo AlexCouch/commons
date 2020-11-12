@@ -1,6 +1,10 @@
 {
     "name": "allocators",
     "kind": "app",
-    "other_includes": ["C:\\projects\\commons\\commons\\includes"],
+    "other_includes": [
+        "C:\\projects\\commons\\commons\\includes",
+        "C:\\projects\\commons\\debug\\includes",
+        "C:\\projects\\commons\\time\\includes"
+    ],
     "other_libs": []
 }
