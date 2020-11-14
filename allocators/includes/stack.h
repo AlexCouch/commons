@@ -1,6 +1,6 @@
 #pragma once
 
-// #include "debug.h"
+#include "debug.h"
 
 ///A stack allocator is an allocator on the stack. This allocator will allocate 4KB of
 ///stack/temporary memory to be used. This uses the stack's natural semantics to

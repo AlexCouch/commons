@@ -1,19 +1,16 @@
 #pragma once
 
+#include "string_store.h"
 #include <time.h>
-#include "string.h"
 
-string get_now_time_string(){
-    string str;
+str get_now_time_string(){
     time_t rawtime;
     struct tm* timeinfo;
 
     time(&rawtime);
     timeinfo = localtime(&rawtime);
-
-    str = create_string(asctime(timeinfo));
-    str.str_data[str.len - 1] = 0;
-    str.len -= 1;
-    return str;
+    str time_str = asctime(timeinfo);
+    u32 time_len = string_length(time_str);
+    time_str[time_len-1] = 0;
+    return time_str;
 }
-

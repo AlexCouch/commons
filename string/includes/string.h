@@ -21,7 +21,7 @@ RECEIVER(str_data)
 ///         might have to :(
 ///         ~alex, 4:58 AM PST, 11/11/2020
 string create_string(str str_data, ...){
-    string str;
+    string str = { "", 0 };
     
     va_list args;
     va_start(args, str_data);
@@ -160,41 +160,41 @@ bool strcmp(str s1, str s2){
     return stringeq(&string1, &string2);
 }
 
-PUBLIC
-RECEIVER(str)
-void trim(string str){
-    u32 left = 0;
-    bool trim_left_flag = true;
-    bool left_trimmed = false;
-    u32 right = str.len - 1;
-    bool trim_right_flag = true;
-    bool right_trimmed = false;
-    for(
-        left, right;
-        left < str.len, right >= 0;
-        left++, right--
-    ){
-        char lchar = str.str_data[left];
-        char rchar = str.str_data[right];
-        if(lchar != ' '){
-            trim_left_flag = false;
-        }
-        if(rchar != ' '){
-            trim_right_flag = false;
-        }
-        if(!trim_left_flag && !left_trimmed){
-            str.str_data += left;
-            str.len -= left;
-            left_trimmed = true;
-        }
-        if(!trim_right_flag && !right_trimmed){
-            str.len -= right;
-            str.str_data[right+1] = 0;
-            right_trimmed = true;
-        }
-        if(left_trimmed && right_trimmed){
-            break;
-        }
-    }
+// PUBLIC
+// RECEIVER(str)
+// void trim(string str){
+//     u32 left = 0;
+//     bool trim_left_flag = true;
+//     bool left_trimmed = false;
+//     u32 right = str.len - 1;
+//     bool trim_right_flag = true;
+//     bool right_trimmed = false;
+//     for(
+//         left, right;
+//         left < str.len, right >= 0;
+//         left++, right--
+//     ){
+//         char lchar = str.str_data[left];
+//         char rchar = str.str_data[right];
+//         if(lchar != ' '){
+//             trim_left_flag = false;
+//         }
+//         if(rchar != ' '){
+//             trim_right_flag = false;
+//         }
+//         if(!trim_left_flag && !left_trimmed){
+//             str.str_data += left;
+//             str.len -= left;
+//             left_trimmed = true;
+//         }
+//         if(!trim_right_flag && !right_trimmed){
+//             str.len -= right;
+//             str.str_data[right+1] = 0;
+//             right_trimmed = true;
+//         }
+//         if(left_trimmed && right_trimmed){
+//             break;
+//         }
+//     }
 
-}
+// }
