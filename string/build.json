@@ -1,6 +1,0 @@
-{
-    "name": "string",
-    "kind": "app",
-    "other_includes": ["C:\\projects\\commons\\commons\\includes"],
-    "other_libs": []
-}
