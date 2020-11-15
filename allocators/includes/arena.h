@@ -8,6 +8,8 @@
 struct arena_alloc{
     ///The size allocated for the arena
     u32 size;
+    ///The currently used capacity of the arena.
+    u32 capacity;
     ///The first chunk of data allocated to the arena
     void* first;
     ///The last chunk of data allocated to the arena
@@ -29,17 +31,18 @@ arena_alloc* arena_init(u32 size){
     //Allocate an arena_alloc struct on heap with given size
     //This will allows be a borrowed data object
     u32 size_alloc = size + sizeof(arena_alloc);
-    printf("size_alloc: %i\n", size_alloc);
-    printf("arena size: %i\n", sizeof(arena_alloc));
+    // printf("size_alloc: %i\n", size_alloc);
+    // printf("arena size: %zu\n", sizeof(arena_alloc));
     ///Allocate a new arena on the heap with the given `size_alloc`
     ///MEM: Borrowed-always
     ///LIFETIME: Borrowed by anything, after its returned to the caller, that needs to put data into the allocator until it's passed into arena_deinit.
     arena_alloc* arena = (arena_alloc*)malloc(size_alloc);
-    printf("Arena addr: %p\n", arena);
+    // printf("Arena addr: %p\n", arena);
     arena->first = ((char*)arena)+sizeof(arena_alloc);
-    printf("Arena->first addr: %p\n", arena->first);
+    // printf("Arena->first addr: %p\n", arena->first);
     arena->last = arena->first;
     arena->size = size;
+    arena->capacity = 0;
     return arena;
 }
 
@@ -67,8 +70,9 @@ void* arena_put(arena_alloc* arena, void* data, u32 size){
     ///MEM: Borrowed-always
     ///LIFETIME: The data copied into this address is persistent as long as the arena remains alive. This data's lifetime depends on the arena's.
     void* ret = arena->last;
-    printf("Current addr copied to %p\n", (u8*)arena->last);
-    printf("Next addr predicted: %p\n", ((u8*)arena->last) + size);
+    // printf("Current addr copied to %p\n", (u8*)arena->last);
+    // printf("Next addr predicted: %p\n", ((u8*)arena->last) + size);
     arena->last = (void*)(((u8*)ret) + size);
+    arena->capacity += size;
     return ret;
 }
