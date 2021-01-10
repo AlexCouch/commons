@@ -53,3 +53,9 @@ typedef double real64;
 ///This just helps me and anyone using these libraries know how they ought to initialize the marked struct
 ///`init` is the procedure to use to initialize the marked struct
 #define INIT(visibility, init)
+
+#define record(name) typedef struct name name; \
+    struct name
+
+#define variant(name) typedef enum name name; \
+    enum name
